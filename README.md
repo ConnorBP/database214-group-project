@@ -1,8 +1,12 @@
-# React + Vite
+# E-Commerce Database for software products
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Datatabase for comp214 group project with a focus on software license key sales, and a cart based checkout system.
 
-Currently, two official plugins are available:
+![database tabes design](./docs/table_design_v1.png)
+_First table design concept_
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Database
+The database SQL migrations are in [./database_migrations](./database_migrations/)
+
+# Frontend
+The proof of concept database designs are located in [./frontend](./frontend/)
