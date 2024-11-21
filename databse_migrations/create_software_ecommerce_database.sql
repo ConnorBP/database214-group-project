@@ -2,6 +2,7 @@
 
 CREATE TABLE Customer (
     id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
+    current_cart_id NUMBER DEFAULT -1 NOT NULL,
     email VARCHAR2(255) NOT NULL,
     password_hash VARCHAR2(64) NOT NULL,
     full_name VARCHAR2(64) NOT NULL,
@@ -34,7 +35,8 @@ CREATE TABLE "Order" (
     order_status NUMBER NOT NULL,
     subtotal NUMBER NOT NULL,
     tax NUMBER NOT NULL,
-    status NUMBER NOT NULL
+    status NUMBER NOT NULL,
+    created_at DATE DEFAULT SYSDATE
 );
 
 CREATE TABLE LicenseKey (
