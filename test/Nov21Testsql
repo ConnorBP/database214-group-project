@@ -1,0 +1,10 @@
+
+--testing procedure gen_order
+--tested using code on Nov 21
+BEGIN
+    gen_order(10);
+END;    
+
+SELECT * FROM Cart;
+SELECT * FROM "Order";
+
