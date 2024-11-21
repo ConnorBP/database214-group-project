@@ -9,6 +9,11 @@ INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (12, 7, 5);
 
 --testing trigger to condense lines in CartProduct with the same cart_id and product_id into one line
 --when order is created with Cart
+--cart_cleanup_trigger
+SELECT * FROM "Order";
+SELECT * FROM CartProduct;
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (2, 12, 'order placed');
 
 --testing trigger to assign Cart to new Customer
 SELECT * FROM Customer;

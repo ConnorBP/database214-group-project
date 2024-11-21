@@ -12,6 +12,7 @@ DROP TABLE ProductCategory CASCADE CONSTRAINTS;
 
 
 --drop triggers
+DROP TRIGGER cart_totals_trigger;
 DROP TRIGGER customer_cart_trigger;
 DROP TRIGGER assign_current_cart_trigger;
 
