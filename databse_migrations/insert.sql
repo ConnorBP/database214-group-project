@@ -138,5 +138,28 @@ UPDATE Cart c SET subtotal = (SELECT SUM(p.price * cp.quantity)
                                 FROM Product p JOIN CartProduct cp ON p.id = cp.product_id
                                 WHERE cp.cart_id = c.id);
 UPDATE CART SET tax = subtotal * 0.13;
-SELECT * FROM Cart;
+--SELECT * FROM Cart;
+
+--create Cart that are not in Order and assign them to Customer 
+--for when there are no triggers making Cart when there are new Customer
+INSERT INTO Cart (customer_id) VALUES(1);
+INSERT INTO Cart (customer_id) VALUES(2);
+INSERT INTO Cart (customer_id) VALUES(3);
+INSERT INTO Cart (customer_id) VALUES(4);
+INSERT INTO Cart (customer_id) VALUES(5);
+INSERT INTO Cart (customer_id) VALUES(6);
+INSERT INTO Cart (customer_id) VALUES(7);
+INSERT INTO Cart (customer_id) VALUES(8);
+INSERT INTO Cart (customer_id) VALUES(9);
+INSERT INTO Cart (customer_id) VALUES(10);
+UPDATE Customer SET current_cart_id = 11 WHERE id = 1;
+UPDATE Customer SET current_cart_id = 12 WHERE id = 2;
+UPDATE Customer SET current_cart_id = 13 WHERE id = 3;
+UPDATE Customer SET current_cart_id = 14 WHERE id = 4;
+UPDATE Customer SET current_cart_id = 15 WHERE id = 5;
+UPDATE Customer SET current_cart_id = 16 WHERE id = 6;
+UPDATE Customer SET current_cart_id = 17 WHERE id = 7;
+UPDATE Customer SET current_cart_id = 18 WHERE id = 8;
+UPDATE Customer SET current_cart_id = 19 WHERE id = 9;
+UPDATE Customer SET current_cart_id = 20 WHERE id = 10;
 

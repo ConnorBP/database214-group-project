@@ -23,8 +23,8 @@ CREATE TABLE Product (
 CREATE TABLE Cart (
     id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
     customer_id NUMBER NOT NULL,
-    subtotal NUMBER NOT NULL,
-    tax NUMBER NOT NULL
+    subtotal NUMBER DEFAULT ON NULL 0 NOT NULL,
+    tax NUMBER DEFAULT ON NULL 0 NOT NULL
 );
 
 CREATE TABLE "Order" (
@@ -33,10 +33,8 @@ CREATE TABLE "Order" (
     cart_id NUMBER NOT NULL,
     order_placed NUMBER NOT NULL,
     order_status NUMBER NOT NULL,
-    subtotal NUMBER NOT NULL,
-    tax NUMBER NOT NULL,
     status NUMBER NOT NULL,
-    created_at DATE DEFAULT SYSDATE
+    created_at DATE DEFAULT SYSDATE NOT NULL
 );
 
 CREATE TABLE LicenseKey (
