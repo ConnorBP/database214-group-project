@@ -34,26 +34,26 @@ INSERT INTO ProductCategory (name) VALUES ('Business Tools');
 INSERT INTO ProductCategory (name) VALUES ('Utilities');
 
 --Product insert
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (1, 'Visual Studio', 150.00, 'An integrated development environment', 500);
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (2, 'Power BI', 200.00, 'A data analytics tool for business intelligence', 300);
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (3, 'Adobe Photoshop', 250.00, 'A graphics design software', 120);
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (4, 'Cyberpunk 2077', 60.00, 'An open-world role-playing game', 70000);
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (5, 'Norton Security', 50.00, 'Antivirus and internet security software', 10);
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (6, 'Microsoft Office', 120.00, 'A suite of productivity applications', 10);
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (7, 'MySQL Workbench', 65.00, 'Database management software', 50);
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (8, 'AWS Cloud Storage', 50.00, 'Cloud storage service from AWS', 40);
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (9, 'Trello', 10.00, 'Project management software', 50);
-INSERT INTO Product (category_id, name, price, description, file_size)
-    VALUES (10, 'WinRAR', 30.00, 'File compression software', 50);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (1, 'Visual Studio', 150.00, 'An integrated development environment', 500, 1);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (2, 'Power BI', 200.00, 'A data analytics tool for business intelligence', 300, 1);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (3, 'Adobe Photoshop', 250.00, 'A graphics design software', 120, 1);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (4, 'Cyberpunk 2077', 60.00, 'An open-world role-playing game', 70000, 1);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (5, 'Norton Security', 50.00, 'Antivirus and internet security software', 10, 1);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (6, 'Microsoft Office', 120.00, 'A suite of productivity applications', 10, 1);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (7, 'MySQL Workbench', 65.00, 'Database management software', 50, 1);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (8, 'AWS Cloud Storage', 50.00, 'Cloud storage service from AWS', 40, 1);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (9, 'Trello', 10.00, 'Project management software', 50, 1);
+INSERT INTO Product (category_id, name, price, description, file_size, min_age)
+    VALUES (10, 'WinRAR', 30.00, 'File compression software', 50, 1);
 
 --Cart inserts    
 INSERT INTO Cart (customer_id) VALUES(1);
@@ -68,48 +68,48 @@ INSERT INTO Cart (customer_id) VALUES(9);
 INSERT INTO Cart (customer_id) VALUES(10);
 
 --Order inserts
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (1, 1, 1670505600, 1, 1);
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (2, 2, 1670928000, 2, 1);
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (3, 3, 1671014400, 1, 1);
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (4, 4, 1671100800, 3, 2);
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (5, 5, 1671187200, 2, 1);
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (6, 6, 1671273600, 1, 1);
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (7, 7, 1671360000, 1, 1);
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (8, 8, 1671446400, 2, 1);
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (9, 9, 1671532800, 1, 1);
-INSERT INTO "Order" (customer_id, cart_id, order_placed, order_status, status) 
-    VALUES (10, 10, 1671619200, 3, 2);
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (1, 1, 'order placed');
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (2, 2, 'order placed');
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (3, 3, 'order placed');
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (4, 4, 'order placed');
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (5, 5, 'order placed');
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (6, 6, 'order placed');
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (7, 7, 'order placed');
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (8, 8, 'order placed');
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (9, 9, 'order placed');
+INSERT INTO "Order" (customer_id, cart_id, status) 
+    VALUES (10, 10, 'order placed');
     
 --LicenseKey inserts
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (1, 1, 'LM2345KJH4567', TO_DATE('2024-01-15', 'YYYY-MM-DD'), NULL, NULL, 365, 1);
+    VALUES (1, 1, 'LM2345KJH4567', TO_DATE('2024-01-15', 'YYYY-MM-DD'), NULL, NULL, 365, 'unclaimed');
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (2, 2, 'PI1234LQA1234', TO_DATE('2024-02-20', 'YYYY-MM-DD'), NULL, NULL, 180, 1);
+    VALUES (2, 2, 'PI1234LQA1234', TO_DATE('2024-02-20', 'YYYY-MM-DD'), NULL, NULL, 180, 'unclaimed');
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (3, 3, 'FT3456KJH5678', TO_DATE('2024-03-25', 'YYYY-MM-DD'), NULL, NULL, 30, 1);
+    VALUES (3, 3, 'FT3456KJH5678', TO_DATE('2024-03-25', 'YYYY-MM-DD'), NULL, NULL, 30, 'unclaimed');
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (4, 4, 'SG6789JHG8901', TO_DATE('2024-04-10', 'YYYY-MM-DD'), NULL, NULL, 365, 1);
+    VALUES (4, 4, 'SG6789JHG8901', TO_DATE('2024-04-10', 'YYYY-MM-DD'), NULL, NULL, 365, 'unclaimed');
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (5, 5, 'SS1234HJ89KL', TO_DATE('2024-05-05', 'YYYY-MM-DD'), NULL, NULL, 365, 1);
+    VALUES (5, 5, 'SS1234HJ89KL', TO_DATE('2024-05-05', 'YYYY-MM-DD'), NULL, NULL, 365, 'unclaimed');
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (6, 6, 'UC2345TY6758', TO_DATE('2024-06-15', 'YYYY-MM-DD'), NULL, NULL, 180, 1);
+    VALUES (6, 6, 'UC2345TY6758', TO_DATE('2024-06-15', 'YYYY-MM-DD'), NULL, NULL, 180, 'unclaimed');
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (7, 7, 'GA3456FY7657', TO_DATE('2024-07-20', 'YYYY-MM-DD'), NULL, NULL, 365, 1);
+    VALUES (7, 7, 'GA3456FY7657', TO_DATE('2024-07-20', 'YYYY-MM-DD'), NULL, NULL, 365, 'unclaimed');
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (8, 8, 'LE5678GJ6547', TO_DATE('2024-08-15', 'YYYY-MM-DD'), NULL, NULL, 90, 1);
+    VALUES (8, 8, 'LE5678GJ6547', TO_DATE('2024-08-15', 'YYYY-MM-DD'), NULL, NULL, 90, 'unclaimed');
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (9, 9, 'OF3456GH1234', TO_DATE('2024-09-10', 'YYYY-MM-DD'), NULL, NULL, 365, 1);
+    VALUES (9, 9, 'OF3456GH1234', TO_DATE('2024-09-10', 'YYYY-MM-DD'), NULL, NULL, 365, 'unclaimed');
 INSERT INTO LicenseKey (product_id, order_id, license_code, issued_at, claimed_at, claimed_by, license_length, status) 
-    VALUES (10, 10, 'CB2345FD2346', TO_DATE('2024-10-05', 'YYYY-MM-DD'), NULL, NULL, 365, 1);
+    VALUES (10, 10, 'CB2345FD2346', TO_DATE('2024-10-05', 'YYYY-MM-DD'), NULL, NULL, 365, 'unclaimed');
 
 --CartProduct insertions
 INSERT INTO CartProduct (cart_id, product_id, quantity) 

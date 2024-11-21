@@ -17,7 +17,8 @@ CREATE TABLE Product (
     name VARCHAR2(255) NOT NULL,
     price NUMBER(10, 2) NOT NULL,
     description VARCHAR2(255) NOT NULL,
-    file_size NUMBER
+    file_size NUMBER,
+    min_age NUMBER
 );
 
 CREATE TABLE Cart (
@@ -31,10 +32,8 @@ CREATE TABLE "Order" (
     id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
     customer_id NUMBER NOT NULL,
     cart_id NUMBER NOT NULL,
-    order_placed NUMBER NOT NULL,
-    order_status NUMBER NOT NULL,
-    status NUMBER NOT NULL,
-    created_at DATE DEFAULT SYSDATE NOT NULL
+    status VARCHAR2(20) NOT NULL,
+    created_at DATE DEFAULT ON NULL SYSDATE NOT NULL
 );
 
 CREATE TABLE LicenseKey (
@@ -46,7 +45,7 @@ CREATE TABLE LicenseKey (
     claimed_at DATE,
     claimed_by NUMBER,
     license_length NUMBER NOT NULL,
-    status NUMBER NOT NULL
+    status VARCHAR2(20) NOT NULL
 );
 
 CREATE TABLE CartProduct (
