@@ -8,6 +8,7 @@
 --MISSING: package (make it with created procedures and functions)
 --MISSING: global variables (include in package)
 
+--OPTION: make a procedure to create new user and assign a new current cart to them
 
 --indicies
 
@@ -36,26 +37,36 @@ CREATE OR REPLACE TRIGGER cart_totals_trigger
         DBMS_OUTPUT.PUT_LINE(adjustment_subtotal);
         new_subtotal := old_subtotal + adjustment_subtotal;    
         UPDATE Cart SET subtotal = new_subtotal WHERE id = :NEW.cart_id;
+        new_tax := new_subtotal * 0.13;
+        UPDATE Cart SET tax = new_tax WHERE id = :NEW.cart_id;
     END;
 
---condenses lines for the same Cart and Product in 
-
-
---assigns empty shopping cart to upon new Customer creation
---cannot edit the table that activated the trigger during the trigger
-CREATE OR REPLACE TRIGGER customer_cart_trigger
-        AFTER INSERT ON Customer
+--condenses lines for the same Cart with the same product_id and cart_id
+--when an order is being created
+--this one is useful if the previous update price trigger is used
+CREATE OR REPLACE TRIGGER cart_cleanup_trigger
+        AFTER INSERT ON "Order"
         FOR EACH ROW
+    DECLARE
+        
     BEGIN
-        INSERT INTO Cart(customer_id) VALUES (:NEW.id);
-        UPDATE Customer SET current_cart_id = (SELECT MAX(Cart.id) FROM Cart WHERE Cart.customer_id = :NEW.id) WHERE Customer.id = :NEW.id;
-    END;
-CREATE OR REPLACE TRIGGER assign_current_cart_trigger
-    AFTER INSERT ON Cart
-    FOR EACH ROW
-    FOLLOWS 
-    BEGIN
-        UPDATE Customer SET current_cart_id = :NEW.id WHERE id = :NEW.Customer_id;
+    /*
+        SELECT SUM(cp.quantity)
+            FROM CartProduct cp
+            WHERE cp.product_id IN (SELECT COUNT(*), product_id duplicate_ids FROM CartProduct
+                                        WHERE cart_id = :NEW.cart_id
+                                        GROUP BY product_ID
+                                        HAVING COUNT(*) > 1)
+            GROUP BY cp.product_id;
+            
+        SELECT COUNT(*), product_id duplicate_ids FROM CartProduct
+            WHERE cart_id = :NEW.cart_id
+            GROUP BY product_ID
+            HAVING COUNT(*) > 1;
+       */     
+        SELECT SUM(quantity) FROM CartProduct
+        
+        
     END;
 
 
@@ -88,8 +99,6 @@ IS
 BEGIN
     DELETE FROM CartProduct WHERE cart_id NOT IN (SELECT cart_id FROM "Order");
 END;
-
---OPTION: make a procedure to create new user and assign a new current cart to them
 
 
 --functions

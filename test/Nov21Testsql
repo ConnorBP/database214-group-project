@@ -1,6 +1,22 @@
+--to test things written on and around Nov 21
+
+--hard coded values might have to be adjusted depending on values in database
+
+--testing trigger to update Cart total and tax when quantities change
+SELECT * FROM CartProduct;
+SELECT * FROM Cart;
+INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (12, 7, 5);
+
+--testing trigger to condense lines in CartProduct with the same cart_id and product_id into one line
+--when order is created with Cart
+
+--testing trigger to assign Cart to new Customer
+SELECT * FROM Customer;
+INSERT INTO Customer (email, password_hash, full_name, phone_number, birthday, billing_address) 
+    VALUES ('bb@example.com', 'hash11', 'BobbyBob', '911', TO_DATE('1980-05-15', 'YYYY-MM-DD'), '321 Main St, City, Country');
+
 
 --testing procedure gen_order
---tested using code on Nov 21
 BEGIN
     gen_order(10);
 END;    
