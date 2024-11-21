@@ -4,7 +4,17 @@
 BEGIN
     gen_order(10);
 END;    
+/
 
 SELECT * FROM Cart;
 SELECT * FROM "Order";
+
+--testing procedure empty_cart
+INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (12, 7, 5);
+SELECT * FROM CartProduct;
+
+BEGIN
+    empty_cart(1);
+END;
+/
 

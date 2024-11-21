@@ -1,4 +1,8 @@
--- migrations to create initial database tables for the "software e-commerce" database
+
+---correct order to run files:
+--      1 create tables (this file)
+--      2 insert records 
+--      3 add features
 
 CREATE TABLE Customer (
     id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,

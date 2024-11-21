@@ -1,4 +1,9 @@
 
+---correct order to run files:
+--      1 create tables
+--      2 insert records (this file)
+--      3 add features
+
 --Customer table inserts
 INSERT INTO Customer (email, password_hash, full_name, phone_number, birthday, billing_address) 
     VALUES ('john.doe@example.com', 'hash1', 'John Doe', '555-0101', TO_DATE('1980-05-15', 'YYYY-MM-DD'), '123 Main St, City, Country');
