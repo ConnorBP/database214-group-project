@@ -1,11 +1,8 @@
 # E-Commerce Database for software products
 
-Datatabase for comp214 group project with a focus on software license key sales, and a cart based checkout system.
+Database for comp214 group project with a focus on software license key sales, and a cart based checkout system.
 
-![initial database tables design](./docs/table_design_v1.png)
-_First table design concept_
-
-![latest database tables design](./docs/table_design_v2.png)
+![latest database tables design](./docs/table_design_v3.png)
 Latest table design concept_
 
 # Database
