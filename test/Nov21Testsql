@@ -31,6 +31,7 @@ SELECT * FROM "Order";
 --testing procedure empty_cart
 INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (12, 7, 5);
 SELECT * FROM CartProduct;
+SELECT * FROM Cart;
 
 BEGIN
     empty_cart(12);

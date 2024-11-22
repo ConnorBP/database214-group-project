@@ -90,16 +90,16 @@ BEGIN
 END;
 /
 
---empty all Cart (not in orders)
+--empty all Cart not in Order
 --deletes all rows of CartProduct no in an Order
 --Cart total will update from trigger
 CREATE OR REPLACE PROCEDURE empty_cart
-(num IN cart.id%TYPE) --syntax requires on parameter at lesat
+(dummyNum IN cart.id%TYPE) --syntax requires on parameter at lesat; THIS NUMBER DOES NOTHING
 IS
 BEGIN
     DELETE FROM CartProduct WHERE cart_id NOT IN (SELECT cart_id FROM "Order");
-    UPDATE Cart SET subtotal = 0 WHERE id = num;
-    UPDATE Cart SET tax = 0 WHERE id = num;
+    UPDATE Cart SET subtotal = 0 WHERE id NOT IN (SELECT cart_id FROM "Order");
+    UPDATE Cart SET tax = 0 WHERE id NOT IN (SELECT cart_id FROM "Order");
     COMMIT;
 END;
 /
