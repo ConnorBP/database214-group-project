@@ -1,7 +1,12 @@
--- migrations to create initial database tables for the "software e-commerce" database
+
+---correct order to run files:
+--      1 create tables (this file)
+--      2 insert records 
+--      3 add features
 
 CREATE TABLE Customer (
     id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
+    current_cart_id NUMBER DEFAULT -1 NOT NULL,
     email VARCHAR2(255) NOT NULL,
     password_hash VARCHAR2(64) NOT NULL,
     full_name VARCHAR2(64) NOT NULL,
@@ -16,25 +21,23 @@ CREATE TABLE Product (
     name VARCHAR2(255) NOT NULL,
     price NUMBER(10, 2) NOT NULL,
     description VARCHAR2(255) NOT NULL,
-    file_size NUMBER
+    file_size NUMBER,
+    min_age NUMBER
 );
 
 CREATE TABLE Cart (
     id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
     customer_id NUMBER NOT NULL,
-    subtotal NUMBER NOT NULL,
-    tax NUMBER NOT NULL
+    subtotal NUMBER DEFAULT ON NULL 0 NOT NULL,
+    tax NUMBER DEFAULT ON NULL 0 NOT NULL
 );
 
 CREATE TABLE "Order" (
     id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,
     customer_id NUMBER NOT NULL,
     cart_id NUMBER NOT NULL,
-    order_placed NUMBER NOT NULL,
-    order_status NUMBER NOT NULL,
-    subtotal NUMBER NOT NULL,
-    tax NUMBER NOT NULL,
-    status NUMBER NOT NULL
+    status VARCHAR2(20) NOT NULL,
+    created_at DATE DEFAULT ON NULL SYSDATE NOT NULL
 );
 
 CREATE TABLE LicenseKey (
@@ -46,7 +49,7 @@ CREATE TABLE LicenseKey (
     claimed_at DATE,
     claimed_by NUMBER,
     license_length NUMBER NOT NULL,
-    status NUMBER NOT NULL
+    status VARCHAR2(20) NOT NULL
 );
 
 CREATE TABLE CartProduct (
