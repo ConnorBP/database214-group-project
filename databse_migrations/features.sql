@@ -12,6 +12,11 @@
 
 --indicies
 
+--Customer table full_name index
+CREATE INDEX customer_full_name_idx ON Customer(full_name);
+
+--Product table name index
+CREATE INDEX product_name_idx ON Product(name);
 
 
 --triggers
@@ -36,8 +41,8 @@ CREATE OR REPLACE TRIGGER cart_totals_trigger
         UPDATE Cart SET subtotal = new_subtotal WHERE id = :NEW.cart_id;
         new_tax := new_subtotal * 0.13;
         UPDATE Cart SET tax = new_tax WHERE id = :NEW.cart_id;
-        COMMIT;
     END;
+/
 
 --condenses lines for the same Cart with the same product_id and cart_id
 --when an order is being created
@@ -59,8 +64,8 @@ CREATE OR REPLACE TRIGGER cart_cleanup_trigger
             DELETE FROM CartProduct
                 WHERE id != rec_cur.min_id AND product_id = rec_cur.product_id;
         END LOOP;
-        COMMIT;
     END;
+/
 
 
 --procedures
@@ -83,27 +88,67 @@ BEGIN
     UPDATE Customer SET current_cart_id = cart1_id WHERE id = customer_id_in;
     COMMIT;
 END;
+/
 
 --empty all Cart (not in orders)
 --deletes all rows of CartProduct no in an Order
 --Cart total will update from trigger
 CREATE OR REPLACE PROCEDURE empty_cart
-(num IN NUMBER) --syntax requires on parameter at lesat
+(num IN cart.id%TYPE) --syntax requires on parameter at lesat
 IS
 BEGIN
     DELETE FROM CartProduct WHERE cart_id NOT IN (SELECT cart_id FROM "Order");
+    UPDATE Cart SET subtotal = 0 WHERE id = num;
+    UPDATE Cart SET tax = 0 WHERE id = num;
     COMMIT;
 END;
+/
 
 
 --functions
 
 --count orders made for a date
-
-
+CREATE OR REPLACE FUNCTION count_orders_on_date
+(
+    in_date IN "Order".created_at%TYPE
+)
+RETURN NUMBER
+IS
+    out_count NUMBER;
+    in_year_char VARCHAR2(4) := TO_CHAR(in_date, 'YYYY');
+    in_month_char VARCHAR(2) := TO_CHAR(in_date, 'MM');
+    in_day_char VARCHAR(2) := TO_CHAR(in_date, 'DD');
+BEGIN
+    SELECT COUNT(*) INTO out_count FROM "Order"
+        WHERE in_year_char = TO_CHAR(created_at, 'YYYY')
+            AND in_month_char = TO_CHAR(created_at, 'MM')
+            AND in_day_char = TO_CHAR(created_at, 'DD');
+    RETURN out_count;
+END;
+/
 
 --count number of a product sold on a specific date
-
-
+CREATE OR REPLACE FUNCTION count_product_sold_on_date
+(
+    in_date IN "Order".created_at%TYPE,
+    in_product_id IN Product.id%TYPE
+)
+RETURN NUMBER
+IS
+    out_count NUMBER;
+    in_year_char VARCHAR2(4) := TO_CHAR(in_date, 'YYYY');
+    in_month_char VARCHAR(2) := TO_CHAR(in_date, 'MM');
+    in_day_char VARCHAR(2) := TO_CHAR(in_date, 'DD');
+BEGIN
+    SELECT SUM(cp.quantity) INTO out_count
+        FROM "Order" o JOIN  Cart c ON o.cart_id = c.id
+        JOIN CartProduct cp ON c.id = cp.id
+        WHERE o.id IS NOT NULL
+            AND cp.product_id = in_product_id
+            AND in_year_char = TO_CHAR(created_at, 'YYYY')
+            AND in_month_char = TO_CHAR(created_at, 'MM')
+            AND in_day_char = TO_CHAR(created_at, 'DD');
+    RETURN out_count;        
+END;
 
 

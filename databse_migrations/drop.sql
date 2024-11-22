@@ -9,13 +9,17 @@ DROP TABLE CartProduct CASCADE CONSTRAINTS;
 DROP TABLE ProductCategory CASCADE CONSTRAINTS;
 
 --drop indicies
-
+DROP INDEX customer_full_name_idx;
+DROP INDEX product_name_idx;
 
 --drop triggers
 DROP TRIGGER cart_totals_trigger;
-DROP TRIGGER customer_cart_trigger;
-DROP TRIGGER assign_current_cart_trigger;
+DROP TRIGGER cart_cleanup_trigger;
 
 --drop procedures
+DROP PROCEDURE gen_order;
+DROP PROCEDURE empty_cart;
 
-
+--drop functions
+DROP FUNCTION count_orders_on_date;
+DROP FUNCTION count_product_sold_on_date;
