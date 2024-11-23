@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {useState} from 'react';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  return (
+  <div className="app">
+    {/* Header */}
+    <header className="app-header">
+      <h1>Database Shop</h1>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Products</a>
+        <a href="#">Cart</a>
+      </nav>
+    </header>
+
+    {/* Main */}
+    <main>
+      <h2>Welcome to the Shop</h2>
+      <p>Your one-stop shop for digital products!</p>
+      <div className="product-grid">
+        <ProductCard className="product-title" name="Digital Planner" price="19.99" />
+        <ProductCard className="product-title" name="eBook" price="4.99" />
+        <ProductCard className="product-title" name="Stock Photo Pack" price="9.99" />
+      </div>
+    </main>
+      
+      {/* Footer */}
+      <footer>
+        <p>&copy; 2021 Shop. All rights reserved</p>
+      </footer>
+  </div>
+  );
+}
+
+// Product card stuff
+function ProductCard({name, price}){
+  const [purchased, setPurchased] = useState(false);
+
+  const handleBuy = () => { 
+    alert('Thank you for your purchase!');
+    setPurchased(true);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="product-card">
+      <h3>{name}</h3>
+      <p>${price}</p>
+      <button onClick={handleBuy} disabled={purchased}>
+        {purchased ? 'Purchased' : 'Buy'}
+      </button>
+    </div>
+
   )
 }
 
-export default App
+export default App;

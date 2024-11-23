@@ -1,42 +1,104 @@
+/* Root container styling */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+
+/* App container */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header styling */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #eaf7fa;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.app-header nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.app-header nav a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+}
+
+.app-header nav a:hover {
+  color: #57c278;
+}
+
+/* Main content styling */
+main {
+  flex: 1;
   padding: 2rem;
+  background-color: #ffffff;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h2 {
+  color: #333;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+
+.product-card {
+  padding: 1rem;
+  border: 1px solid #cce7f0;
+  border-radius: 8px;
+  background-color: #4996c9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.card {
-  padding: 2em;
+/* Button styling */
+.product-card button {
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 300ms;
 }
 
-.read-the-docs {
-  color: #888;
+.product-card button:hover {
+  background-color: #57c278;
+}
+
+.product-card button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+/* Footer styling */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #eaf7fa;
+  font-size: 0.9rem;
+  color: #666;
 }
