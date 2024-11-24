@@ -102,3 +102,91 @@ footer {
   font-size: 0.9rem;
   color: #666;
 }
+
+/* Cart Page Heading */
+.cart-page h2 {
+  font-size: 2em;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+
+.cart-container {
+  text-align: left;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.cart-table th,
+.cart-table td {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-align: left;
+  font-size: 1.1em;
+}
+
+.cart-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+
+.cart-summary {
+  text-align: right;
+  font-size: 1.4em;
+}
+
+.cart-summary p {
+  margin: 15px 0;
+}
+
+.cart-summary .total {
+  font-size: 1.6em;
+  font-weight: bold;
+  color: #007bff;
+}
+
+
+.empty-cart {
+  font-size: 1.4em;
+  color: #666;
+}
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* Default: 5 columns */
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 columns on smaller screens */
+  }
+}
+
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 columns on even smaller screens */
+  }
+}
+
+@media (max-width: 600px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 columns on mobile devices */
+  }
+}
+
+@media (max-width: 400px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    /* 1 column on very small screens */
+  }
+}
