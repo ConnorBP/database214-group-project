@@ -4,11 +4,10 @@
 --      2 insert records 
 --      3 add features (this file)
 
---MISSING: sequence
---MISSING: package (make it with created procedures and functions)
---MISSING: global variables (include in package)
+--MISSING: exceptions (if it is a requirement)
 
 --OPTION: make a procedure to create new user and assign a new current cart to them
+--trying to make a trigger for this causes mutation error
 
 --indicies
 
