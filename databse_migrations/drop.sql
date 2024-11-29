@@ -1,4 +1,6 @@
 
+--file to delete everything in the project
+
 --drop tables
 DROP TABLE Customer CASCADE CONSTRAINTS;
 DROP TABLE Product CASCADE CONSTRAINTS;

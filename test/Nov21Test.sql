@@ -85,7 +85,7 @@ UPDATE "Order" SET created_at = SYSDATE - 1 WHERE id = 5;
 SELECT store_tools.count_orders_on_date(SYSDATE) FROM DUAL;
 
 --package function count_product_sold_on_date
-SELECT o.id, o.created_at, cp.cart_id, cp.id, cp.product_id, cp.quantity
+SELECT o.id order_id, o.created_at, cp.cart_id, cp.id cartproduct_id, cp.product_id, cp.quantity
     FROM "Order" o JOIN Cart c ON o.cart_id = c.id
     RIGHT OUTER JOIN CartProduct cp ON c.id = cp.cart_id;
 SELECT o.id, o.created_at, c.id

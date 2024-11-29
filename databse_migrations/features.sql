@@ -1,13 +1,19 @@
 
 ---correct order to run files:
---      1 create tables
---      2 insert records 
---      3 add features (this file)
+--      1 create_software_ecommerce_database.sql; create tables
+--      2 insert.sql; insert records
+--      3 features.sql; add features (this file)
+--      4 testFormal.sql; tests everything and outputs to DBMS_OUTPUT
 
---MISSING: exceptions (if it is a requirement)
+--      the file drop.sql was included to delete everything made for our project
+
+-- only 1 out of 2 of the required cursors were created
+-- cursor is in cart_cleanup_trigger
+-- cursors are used in anonymous blocks in the testFormal.sql file though
 
 --OPTION: make a procedure to create new user and assign a new current cart to them
 --trying to make a trigger for this causes mutation error
+
 
 --indicies
 
@@ -17,6 +23,27 @@ CREATE INDEX customer_full_name_idx ON Customer(full_name);
 --Product table name index
 CREATE INDEX product_name_idx ON Product(name);
 
+
+--sequence
+
+--count how many times a Order had its associated Cart changed 
+--this normally should not happen, so this is tracked
+CREATE SEQUENCE order_cart_update_seq
+    MINVALUE 0
+    START WITH 0
+    INCREMENT BY 1;
+--increment sequence once to make CURRVAL work
+SELECT order_cart_update_seq.NEXTVAL FROM DUAL;
+--trigger updates the value in this sequence when the Cart on an order changes
+CREATE OR REPLACE TRIGGER order_cart_update_trigger
+        AFTER UPDATE OF cart_id ON "Order"
+        FOR EACH ROW
+        DECLARE
+            temp NUMBER;
+        BEGIN
+            SELECT order_cart_update_seq.NEXTVAL INTO temp FROM DUAL;
+        END;   
+        /
 
 --triggers
 
@@ -253,23 +280,4 @@ PACKAGE BODY STORE_TOOLS AS
 END STORE_TOOLS;
 /
 
---sequence
 
---count how many times a Order had its associated Cart changed 
---this normally should not happen, so this is tracked
-CREATE SEQUENCE order_cart_update_seq
-    MINVALUE 0
-    START WITH 0
-    INCREMENT BY 1;
---increment sequence once to make CURRVAL work
-SELECT order_cart_update_seq.NEXTVAL FROM DUAL;
---trigger updates the value in this sequence when the Cart on an order changes
-CREATE OR REPLACE TRIGGER order_cart_update_trigger
-        AFTER UPDATE OF cart_id ON "Order"
-        FOR EACH ROW
-        DECLARE
-            temp NUMBER;
-        BEGIN
-            SELECT order_cart_update_seq.NEXTVAL INTO temp FROM DUAL;
-        END;   
-        

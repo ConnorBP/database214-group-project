@@ -1,8 +1,11 @@
 
 ---correct order to run files:
---      1 create tables
---      2 insert records (this file)
---      3 add features
+--      1 create_software_ecommerce_database.sql; create tables
+--      2 insert.sql; insert records (this file)
+--      3 features.sql; add features 
+--      4 testFormal.sql; tests everything and outputs to DBMS_OUTPUT
+
+--      the file drop.sql was included to delete everything made for our project
 
 --Customer table inserts
 INSERT INTO Customer (email, password_hash, full_name, phone_number, birthday, billing_address) 
