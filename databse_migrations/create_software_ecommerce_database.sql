@@ -1,8 +1,11 @@
 
 ---correct order to run files:
---      1 create tables (this file)
---      2 insert records 
---      3 add features
+--      1 create_software_ecommerce_database.sql; create tables (this file)
+--      2 insert.sql; insert records
+--      3 features.sql; add features
+--      4 testFormal.sql; tests everything and outputs to DBMS_OUTPUT
+
+--      the file drop.sql was included to delete everything made for our project
 
 CREATE TABLE Customer (
     id NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,

@@ -1,4 +1,6 @@
 
+--file to delete everything in the project
+
 --drop tables
 DROP TABLE Customer CASCADE CONSTRAINTS;
 DROP TABLE Product CASCADE CONSTRAINTS;
@@ -23,3 +25,11 @@ DROP PROCEDURE empty_cart;
 --drop functions
 DROP FUNCTION count_orders_on_date;
 DROP FUNCTION count_product_sold_on_date;
+
+--drop package (and body)
+DROP PACKAGE store_tools;
+
+--drop sequence and related things
+DROP TRIGGER order_cart_update_trigger;
+DROP SEQUENCE order_cart_update_seq;
+
