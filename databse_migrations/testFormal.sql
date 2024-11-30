@@ -84,6 +84,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Testing procedure 1: gen_order');
     DBMS_OUTPUT.PUT_LINE('procedure creates order for a Customer using the current cart id');
     DBMS_OUTPUT.PUT_LINE('also assigns new cart to customer after old cart has been put on an order');
+    DBMS_OUTPUT.NEW_LINE;
     DBMS_OUTPUT.PUT_LINE('Adding a row for Cart 13 of Customer 3 in the Cart_product table');
     DBMS_OUTPUT.NEW_LINE;
     INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (13, 1, 1);
@@ -106,7 +107,7 @@ BEGIN
         );
     END LOOP;
     DBMS_OUTPUT.NEW_LINE;
-    DBMS_OUTPUT.PUT_LINE('Creating order with Cart 13 of Customer 3; currently on Cart 13');
+    DBMS_OUTPUT.PUT_LINE('Creating order with Cart 13 of Customer 3; current_cart_id is 13');
     DBMS_OUTPUT.NEW_LINE;
     gen_order(3);
     DBMS_OUTPUT.PUT_LINE('Displaying all lines in the Cart table for Customer 3 after gen_order is used');
@@ -199,9 +200,9 @@ BEGIN
     DBMS_OUTPUT.NEW_LINE;
     DBMS_OUTPUT.PUT_LINE('Number of orders created today: ' || count_orders_on_date(SYSDATE));
     DBMS_OUTPUT.NEW_LINE;
-    DBMS_OUTPUT.PUT_LINE('Changing Order 2 to have created date to yesterday');
+    DBMS_OUTPUT.PUT_LINE('Changing Order 1 to have created date to yesterday');
     DBMS_OUTPUT.PUT_LINE('(DECREASES ORDERS MADE ON A DATE BY 1)');
-    UPDATE "Order" SET created_at = SYSDATE - 1 WHERE id = 2;
+    UPDATE "Order" SET created_at = SYSDATE - 1 WHERE id = 1;
     DBMS_OUTPUT.NEW_LINE;
     DBMS_OUTPUT.PUT_LINE('Running count_corders_on_date for today/SYSDATE');
     DBMS_OUTPUT.PUT_LINE('Number of orders created today: ' || count_orders_on_date(SYSDATE));
@@ -222,9 +223,10 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('WILL BE OBSERVING PRODUCT ID 1 FOR TODAY/SYSDATE');
     DBMS_OUTPUT.NEW_LINE;
     DBMS_OUTPUT.PUT_LINE('Inserting product id 1 items into Cart 15, that are not orders yet');
+    DBMS_OUTPUT.PUT_LINE('(this line should not be counted by the function');
     INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (15, 1, 3);
     DBMS_OUTPUT.NEW_LINE;
-    DBMS_OUTPUT.PUT_LINE('Displaying products in orders and not in orders');
+    DBMS_OUTPUT.PUT_LINE('Displaying products that are in orders and ones not in orders');
     FOR rec_cur IN cartproduct_cur LOOP
         DBMS_OUTPUT.PUT_LINE(
             'order id: ' || NVL(TO_CHAR(rec_cur.order_id), 'null') ||
@@ -252,13 +254,182 @@ END;
 --package's gen_order manipulate's the package's global variable
 
 --package procedure store_tools.gen_order
+DECLARE
+    CURSOR cart_cur IS
+        SELECT * FROM Cart WHERE customer_id = 6;
+    CURSOR order_cur IS
+        SELECT * FROM "Order" WHERE customer_id = 6; 
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Testing package procedure: store_tools.gen_order');
+    DBMS_OUTPUT.PUT_LINE('procedure creates order for a Customer using the current cart id');
+    DBMS_OUTPUT.PUT_LINE('also assigns new cart to customer after old cart has been put on an order');
+    DBMS_OUTPUT.PUT_LINE('ALSO checks global variable store_tools.session_order_count');
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Adding a row for Cart 16 of Customer 6 in the Cart_product table');
+    DBMS_OUTPUT.NEW_LINE;
+    INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (16, 1, 1);
+    DBMS_OUTPUT.PUT_LINE('Displaying all lines in the Cart table for Customer 6 before gen_order is used');
+    FOR rec_cur1 IN cart_cur LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            'cart id: ' || rec_cur1.id ||
+            '; customer id: ' || rec_cur1.customer_id ||
+            '; subtotal: ' || rec_cur1.subtotal ||
+            '; tax: ' || rec_cur1.tax
+        );
+    END LOOP;
+
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Displaying all lines in the Order table for Customer 6 before gen_order is used');
+    FOR rec_cur2 IN order_cur LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            'order id: ' || rec_cur2.id ||
+            '; customer id: ' || rec_cur2.customer_id ||
+            '; cart id: ' || rec_cur2.cart_id
+        );
+    END LOOP;
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Current value in global variable store_tools.session_order_count: ' || store_tools.session_order_count);
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Creating order with Cart 16 of Customer 6; current_cart_id is 16');
+    DBMS_OUTPUT.NEW_LINE;
+    store_tools.gen_order(6);
+    DBMS_OUTPUT.PUT_LINE('Displaying all lines in the Cart table for Customer 6 after gen_order is used');
+    FOR rec_cur1 IN cart_cur LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            'cart id: ' || rec_cur1.id ||
+            '; customer id: ' || rec_cur1.customer_id ||
+            '; subtotal: ' || rec_cur1.subtotal ||
+            '; tax: ' || rec_cur1.tax
+        );
+    END LOOP;
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Displaying all lines in the Order table for Customer 6 after gen_order is used');
+    FOR rec_cur2 IN order_cur LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            'order id: ' || rec_cur2.id ||
+            '; customer id: ' || rec_cur2.customer_id ||
+            '; cart id: ' || rec_cur2.cart_id
+        );
+    END LOOP;
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Current value in global variable store_tools.session_order_count: ' || store_tools.session_order_count);
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.NEW_LINE;
+END;
+/
 
 --pacakge prodcedure store_tools.empty_cart
+DECLARE
+    CURSOR cartproduct_cur IS
+        SELECT o.id order_id, o.created_at, cp.cart_id, cp.id cartproduct_id, cp.product_id, cp.quantity
+            FROM "Order" o JOIN Cart c ON o.cart_id = c.id
+            RIGHT OUTER JOIN CartProduct cp ON c.id = cp.cart_id;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Testing package procedure: store_tools.empty_cart');
+    DBMS_OUTPUT.PUT_LINE('Adding a few rows for Cart 17 in the Cart_product table');
+    DBMS_OUTPUT.NEW_LINE;
+    INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (17, 7, 1);
+    INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (17, 6, 1);
+    DBMS_OUTPUT.PUT_LINE('Displaying all lines in the Cart_product table');
+    FOR rec_cur IN cartproduct_cur LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            'order id: ' || NVL(TO_CHAR(rec_cur.order_id), 'null') ||
+            '; created date: ' || NVL(TO_CHAR(rec_cur.created_at), 'null') ||
+            '; cart_id: ' || rec_cur.cart_id ||
+            '; cartproduct id: ' || rec_cur.cartproduct_id ||
+            '; product id: ' || rec_cur.product_id ||
+            '; product quantity: ' || rec_cur.quantity
+        );
+    END LOOP;
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Procedure deletes all product lists not in an order yet');
+    DBMS_OUTPUT.PUT_LINE('(Cart 17 is not associated with an order yet)');
+    DBMS_OUTPUT.NEW_LINE;
+    store_tools.empty_cart(1);  --the number does nothing, syntax just required me to have a parameter
+    DBMS_OUTPUT.PUT_LINE('Displaying all lines in the Cart_product table');
+    FOR rec_cur IN cartproduct_cur LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            'order id: ' || NVL(TO_CHAR(rec_cur.order_id), 'null') ||
+            '; created date: ' || NVL(TO_CHAR(rec_cur.created_at), 'null') ||
+            '; cart_id: ' || rec_cur.cart_id ||
+            '; cartproduct id: ' || rec_cur.cartproduct_id ||
+            '; product id: ' || rec_cur.product_id ||
+            '; product quantity: ' || rec_cur.quantity
+        );
+    END LOOP;
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.NEW_LINE;
+END;
+/
 
 --package function store_tools.count_orders_on_date
+DECLARE
+    loop_counter NUMBER:= 1;
+    CURSOR order_cur IS
+        SELECT * FROM "Order"; 
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Testing package function: store_tools.count_orders_on_date');
+    DBMS_OUTPUT.PUT_LINE('considering order that already exists before this line in this file');
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Displaying all order id with creation dates');
+    FOR rec_cur IN order_cur LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            'row count: ' || loop_counter ||
+            '; order id: ' || rec_cur.id ||
+            '; created date: ' || rec_cur.created_at
+        );
+    loop_counter := loop_counter + 1;    
+    END LOOP;
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Number of orders created today: ' || store_tools.count_orders_on_date(SYSDATE));
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Changing Order 2 to have created date to yesterday');
+    DBMS_OUTPUT.PUT_LINE('(DECREASES ORDERS MADE ON A DATE BY 1)');
+    UPDATE "Order" SET created_at = SYSDATE - 1 WHERE id = 2;
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Running count_corders_on_date for today/SYSDATE');
+    DBMS_OUTPUT.PUT_LINE('Number of orders created today: ' || store_tools.count_orders_on_date(SYSDATE));
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.NEW_LINE;
+END;
+/
+
 
 --package function store_tool.count_product_sold_on_date
-
+DECLARE
+    CURSOR cartproduct_cur IS
+        SELECT o.id order_id, o.created_at, cp.cart_id, cp.id cartproduct_id, cp.product_id, cp.quantity
+            FROM "Order" o JOIN Cart c ON o.cart_id = c.id
+            RIGHT OUTER JOIN CartProduct cp ON c.id = cp.cart_id;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Testing package function: store_tools.count_product_sold_on_date');
+    DBMS_OUTPUT.PUT_LINE('WILL BE OBSERVING PRODUCT ID 1 FOR TODAY/SYSDATE');
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Inserting product id 1 items into Cart 17, that are not orders yet');
+    DBMS_OUTPUT.PUT_LINE('(this line should not be counted by the function');
+    INSERT INTO CartProduct(cart_id, product_id, quantity) VALUES (17, 1, 3);
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Displaying products that are in orders and ones not in orders');
+    FOR rec_cur IN cartproduct_cur LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            'order id: ' || NVL(TO_CHAR(rec_cur.order_id), 'null') ||
+            '; created date: ' || NVL(TO_CHAR(rec_cur.created_at), 'null') ||
+            '; cart_id: ' || rec_cur.cart_id ||
+            '; cartproduct id: ' || rec_cur.cartproduct_id ||
+            '; product id: ' || rec_cur.product_id ||
+            '; product quantity: ' || rec_cur.quantity
+        );
+    END LOOP;
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Products not bought (paid for) yet are not in orders');
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.PUT_LINE('Number of product id 1 bought today/SYSDATE in orders: ' ||
+                    store_tools.count_product_sold_on_date(SYSDATE, 1)
+    );
+    DBMS_OUTPUT.NEW_LINE;
+    DBMS_OUTPUT.NEW_LINE;
+END;
+/
 
 
 --sequence order_cart_update_seq

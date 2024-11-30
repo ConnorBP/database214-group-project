@@ -75,7 +75,7 @@ SELECT * FROM Cart;
 --the argument in the procedure does not matter
 --the to make a procedure, there has to be some sort of parameter
 BEGIN
-    store_tools.empty_cart(12);
+    store_tools.empty_cart(17);
 END;
 /
 
