@@ -1,23 +1,54 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import './App.css';
+import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "./App.css";
 
 function App() {
   const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('cart');
+    const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
+  // Save cart data to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
+  // Function to call the backend and add product to cart
+  const addToCartBackend = async (product) => {
+    try {
+      const response = await fetch("http://localhost:3001/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: product.id, // Ensure each product has a unique ID
+          quantity: 1,
+          cartId: "defaultCart", // Replace with dynamic cart ID if applicable
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add product to the cart.");
+      }
+
+      console.log("Product added to cart via backend:", product);
+    } catch (error) {
+      console.error("Error adding product to backend cart:", error);
+    }
   };
 
+  // Frontend function to add product to local cart and trigger backend
+  const addToCart = (product) => {
+    setCart((prevCart) => [...prevCart, product]);
+    addToCartBackend(product); // Call backend to sync cart
+  };
+
+  // Remove product from cart
   const removeFromCart = (productToRemove) => {
-    setCart((prevCart) => prevCart.filter(item => item.name !== productToRemove.name));
+    setCart((prevCart) =>
+      prevCart.filter((item) => item.name !== productToRemove.name)
+    );
   };
 
   return (
@@ -54,48 +85,52 @@ function App() {
   );
 }
 
+// HomePage displays product cards
 function HomePage({ addToCart, cart }) {
   return (
     <main>
       <h2>Welcome to the Shop</h2>
       <p>Your one-stop shop for digital products!</p>
       <div className="product-grid">
-        <ProductCard name="Visual Studio" price={150.00} addToCart={addToCart} cart={cart} />
-        <ProductCard name="Power BI" price={200.00} addToCart={addToCart} cart={cart} />
-        <ProductCard name="Adobe Photoshop" price={250.00} addToCart={addToCart} cart={cart} />
-        <ProductCard name="Cyberpunk 2077" price={60.00} addToCart={addToCart} cart={cart} />
-        <ProductCard name="Norton Security" price={50.00} addToCart={addToCart} cart={cart} />
-        <ProductCard name="Microsoft Office" price={120.00} addToCart={addToCart} cart={cart} />
-        <ProductCard name="MySQL Workbench" price={65.00} addToCart={addToCart} cart={cart} />
-        <ProductCard name="AWS Cloud Storage" price={50.00} addToCart={addToCart} cart={cart} />
-        <ProductCard name="Trello" price={10.00} addToCart={addToCart} cart={cart} />
-        <ProductCard name="WinRAR" price={30.00} addToCart={addToCart} cart={cart} />
+        {/*  IDs for backend reference */}
+        <ProductCard id={1} name="Visual Studio" price={150.0} addToCart={addToCart} cart={cart} />
+        <ProductCard id={2} name="Power BI" price={200.0} addToCart={addToCart} cart={cart} />
+        <ProductCard id={3} name="Adobe Photoshop" price={250.0} addToCart={addToCart} cart={cart} />
+        <ProductCard id={4} name="Cyberpunk 2077" price={60.0} addToCart={addToCart} cart={cart} />
+        <ProductCard id={5} name="Norton Security" price={50.0} addToCart={addToCart} cart={cart} />
+        <ProductCard id={6} name="Microsoft Office" price={120.0} addToCart={addToCart} cart={cart} />
+        <ProductCard id={7} name="MySQL Workbench" price={65.0} addToCart={addToCart} cart={cart} />
+        <ProductCard id={8} name="AWS Cloud Storage" price={50.0} addToCart={addToCart} cart={cart} />
+        <ProductCard id={9} name="Trello" price={10.0} addToCart={addToCart} cart={cart} />
+        <ProductCard id={10} name="WinRAR" price={30.0} addToCart={addToCart} cart={cart} />
       </div>
     </main>
   );
 }
 
-function ProductCard({ name, price, addToCart, cart }) {
+// ProductCard component for each product
+function ProductCard({ id, name, price, addToCart, cart }) {
   const [addedToCart, setAddedToCart] = useState(false);
 
   const handleBuy = () => {
-    addToCart({ name, price });
+    addToCart({ id, name, price });
     setAddedToCart(true); // Mark the product as added to the cart
   };
 
-  const isInCart = cart.some(item => item.name === name); // Check if the item is already in the cart
+  const isInCart = cart.some((item) => item.id === id); // Check if the item is already in the cart
 
   return (
     <div className="product-card">
       <h3>{name}</h3>
       <p>${price.toFixed(2)}</p>
       <button onClick={handleBuy} disabled={isInCart}>
-        {isInCart ? 'In Cart' : 'Add to Cart'}
+        {isInCart ? "In Cart" : "Add to Cart"}
       </button>
     </div>
   );
 }
 
+// CartPage to display and manage items in the cart
 function CartPage({ cart, removeFromCart }) {
   const handleRemove = (itemToRemove) => {
     removeFromCart(itemToRemove);
@@ -124,7 +159,13 @@ function CartPage({ cart, removeFromCart }) {
             <tbody>
               {cart.map((item, index) => (
                 <tr key={index}>
-                  <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <td
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
                     {/* Item name */}
                     <span>{item.name}</span>
                     {/* Remove X button aligned to the right */}
@@ -132,11 +173,11 @@ function CartPage({ cart, removeFromCart }) {
                       className="remove-button"
                       onClick={() => handleRemove(item)}
                       style={{
-                        backgroundColor: 'transparent',
-                        color: 'red',
-                        border: 'none',
-                        fontSize: '18px',
-                        cursor: 'pointer',
+                        backgroundColor: "transparent",
+                        color: "red",
+                        border: "none",
+                        fontSize: "18px",
+                        cursor: "pointer",
                       }}
                     >
                       X
@@ -157,7 +198,5 @@ function CartPage({ cart, removeFromCart }) {
     </main>
   );
 }
-
-
 
 export default App;
