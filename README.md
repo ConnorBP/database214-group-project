@@ -10,3 +10,5 @@ The database SQL migrations are in [./database_migrations](./database_migrations
 
 # Frontend
 The proof of concept database designs are located in [./frontend](./frontend/)
+
+Live demo can be viewed on [Netlify](https://214-database.netlify.app/)
