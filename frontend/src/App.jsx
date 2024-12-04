@@ -27,7 +27,7 @@ function App() {
         body: JSON.stringify({
           productId: product.id, 
           quantity: 1, 
-          cartId: 10, 
+          cartId: 20, 
         }),
       });
   
