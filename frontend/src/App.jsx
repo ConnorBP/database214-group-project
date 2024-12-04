@@ -16,33 +16,49 @@ function App() {
   // Function to call the backend and add product to cart
   const addToCartBackend = async (product) => {
     try {
+      // Log the payload to verify
+      console.log("Sending to backend:", { productId: product.id, quantity: 1 });
+  
       const response = await fetch("http://localhost:3001/api/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productId: product.id, // Ensure each product has a unique ID
-          quantity: 1,
-          cartId: "defaultCart", // Replace with dynamic cart ID if applicable
+          productId: product.id, 
+          quantity: 1, 
+          cartId: 20, 
         }),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to add product to the cart.");
+  
+      if (!response.ok) { 
+        const errorMessage = await response.text();
+        throw new Error(`Backend error: ${response.status} - ${errorMessage}`);
       }
-
-      console.log("Product added to cart via backend:", product);
+  
+      console.log("Product successfully added to backend cart:", product);
     } catch (error) {
       console.error("Error adding product to backend cart:", error);
+      throw error;
     }
   };
+  
+  
+  
+  
 
   // Frontend function to add product to local cart and trigger backend
-  const addToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
-    addToCartBackend(product); // Call backend to sync cart
+  const addToCart = async (product) => {
+    try {
+      await addToCartBackend(product); // Wait for backend response
+      setCart((prevCart) => [...prevCart, product]); // Update cart on success
+    } catch (error) {
+      console.error("Error syncing with backend:", error);
+      alert("Failed to add product to cart. Please try again.");
+    }
   };
+  
+  
 
   // Remove product from cart
   const removeFromCart = (productToRemove) => {
